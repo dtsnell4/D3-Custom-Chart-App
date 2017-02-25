@@ -17,6 +17,8 @@ $(document).ready(function() {
         obj.updateChart(obj.tsvdata);
     });
     $("#getcode").click(function(){
+        $("#thecode").val("");
+
         setObject();
 
         var output;
@@ -60,7 +62,7 @@ $(document).ready(function() {
         obj.bar_hover_color = $("#bar-hover-color").val();
         obj.bar_padding = $("#bar_padding").val();
         obj.bar_padding = +obj.bar_padding.replace('%','') / 100;
-        obj.showtooltip = $("input[name='showtooltip']:checked").val();
+        obj.showtooltip = $("input[name='showtooltip']").is(":checked");
         obj.sig_digits = $("#sig_digits").val();
         obj.tick_format = $("input[name='tickformat']:checked").val();
         obj.xticknum = $("#xticknum").val();
@@ -322,7 +324,6 @@ $(document).ready(function() {
                 d3.select(this).attr("fill", obj.bar_color);
                 tooltip.style("display", "none");
 			});
-            console.log("1", obj.showtooltip)
         } else {
             bars.on("mousemove", function(d){
                 tooltip.style("display", "none")
@@ -331,7 +332,7 @@ $(document).ready(function() {
                 d3.select(this).attr("fill", obj.bar_color);
                 tooltip.style("display", "none");
             });
-            console.log("2", obj.showtooltip)        }
+        }
 
         obj.reset = false;
     };

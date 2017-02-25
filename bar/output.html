@@ -65,6 +65,7 @@
         chartObj.margin = {top: %%top%%, right: %%right%%, bottom: %%bottom%%, left: %%left%%},
         chartObj.bar_padding = %%barpadding%%;
         chartObj.showtooltip = %%showtooltip%%;
+        chartObj.showtooltip = (chartObj.showtooltip == "true");
         chartObj.sig_digits = %%sig_digits%%;
         chartObj.tick_format = %%tickformat%%
         chartObj.xticknum = %%xticknum%%;
@@ -96,7 +97,7 @@
 
         var g = svg.append("g").attr("transform", "translate(" + chartObj.margin.left + "," + chartObj.margin.top + ")");
 
-// TSV file chart initialization function. data.tsv is the file on your server that contains the data for the chart. 
+// TSV file chart initialization function. 'data.tsv' is the file on your server that contains the data for the chart. 
         d3.tsv("data.tsv", function(d) {
             var columns = d3.keys(d[0]);
             d[columns[1]] = +d[columns[1]];
@@ -213,109 +214,125 @@
             }
         }
 
-        // var jdata = [
+
+////////////////////////////////////////////////////////////////////////////////////
+//                       USING THIS CHART WITH JSON OBJECTS                       //
+//                                                                                //
+// It is not necessary to have your data in a TSV or CSV file. In many cases data //
+// changes often so it is preferable to get the data from a server via web        //
+// services like SOAP or REST.  This chart can be initialized with a JSON object  //
+// that you get from a server.  Simply comment out the 'd3.tsv()' function above  //
+// and call the 'chartObj.drawChart(jsonObj)' fucntion below, where 'jsonObj'     //
+// is a properly formed JSON object.                                              //
+//                                                                                //
+// To see an example of this, comment out the 'd3.tsv()' function and uncomment   //
+// the code below, then refresh the page.                                         //
+////////////////////////////////////////////////////////////////////////////////////
+
+        // var jsonObj = [
         //     {
         //         "Letter": "A",
-        //         "Freq": 20  
+        //         "Freq": .20  
         //     },
         //     {
         //         "Letter" : "B",
-        //         "Freq": 12
+        //         "Freq": .12
         //     },
         //     {
         //         "Letter" : "C",
-        //         "Freq": 47
+        //         "Freq": .47
         //     },
         //     {
         //         "Letter" : "D",
-        //         "Freq": 34
+        //         "Freq": .34
         //     },
         //     {
         //         "Letter" : "E",
-        //         "Freq" : 54
+        //         "Freq" : .54
         //     },
         //     {
         //         "Letter" : "F",
-        //         "Freq" : 21
+        //         "Freq" : .21
         //     },
         //     {
         //         "Letter" : "G",
-        //         "Freq" : 57
+        //         "Freq" : .57
         //     },
         //     {
         //         "Letter" : "H",
-        //         "Freq" : 31
+        //         "Freq" : .31
         //     },
         //     {
         //         "Letter" : "I",
-        //         "Freq" : 17
+        //         "Freq" : .17
         //     },
         //     {
         //         "Letter" : "J",
-        //         "Freq" : 5
+        //         "Freq" : .05
         //     },
         //     {
         //         "Letter" : "K",
-        //         "Freq" : 23
+        //         "Freq" : .23
         //     },
         //     {
         //         "Letter" : "L",
-        //         "Freq" : 39
+        //         "Freq" : .39
         //     },
         //     {
         //         "Letter" : "M",
-        //         "Freq" : 29
+        //         "Freq" : .29
         //     },
         //     {
         //         "Letter" : "N",
-        //         "Freq" : 33
+        //         "Freq" : .33
         //     },
         //     {
         //         "Letter" : "O",
-        //         "Freq" : 18
+        //         "Freq" : .18
         //     },
         //     {
         //         "Letter" : "P",
-        //         "Freq" : 35
+        //         "Freq" : .35
         //     },
         //     {
         //         "Letter" : "Q",
-        //         "Freq" : 11
+        //         "Freq" : .11
         //     },
         //     {
         //         "Letter" : "R",
-        //         "Freq" : 45
+        //         "Freq" : .45
         //     },
         //     {
         //         "Letter" : "S",
-        //         "Freq" : 43
+        //         "Freq" : .43
         //     },
         //     {
         //         "Letter" : "T",
-        //         "Freq" : 28
+        //         "Freq" : .28
         //     },
         //     {
         //         "Letter" : "U",
-        //         "Freq" : 26
+        //         "Freq" : .26
         //     },
         //     {
         //         "Letter" : "V",
-        //         "Freq" : 30
+        //         "Freq" : .30
         //     },
         //     {
         //         "Letter" : "X",
-        //         "Freq" : 5
+        //         "Freq" : .05
         //     },
         //     {
         //         "Letter" : "Y",
-        //         "Freq" : 4
+        //         "Freq" : .04
         //     },
         //     {
         //         "Letter" : "Z",
-        //         "Freq" : 2
+        //         "Freq" : .02
         //     }
         // ]
 
-        // chartObj.drawChart(jdata);
+
+        // chartObj.drawChart(jsonObj);
     </script>
 </body>
