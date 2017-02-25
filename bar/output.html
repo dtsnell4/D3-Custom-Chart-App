@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+
+    <!-- This is the link to the D3.js v4 framework.  It needs to be added to the HEAD of your html. -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  
+    <style>
+    /*CSS block.  Add this your the head of your page or your external style sheet*/
+        #chart-container {
+            width: 500px;
+            height: 400px;
+        }
+
+        .bar {
+          fill: %%barcolor%%;
+        }
+
+        .bar:hover {
+          fill: %%barhovercolor%%;
+        }
+
+        .axis {
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-size: 10px;        
+        }
+        
+        .x-axis-label, .y-axis-label {
+            font-weight: bold;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-size: 14px;
+        }
+        
+        .toolTip {
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-size: 12px;
+            position: absolute;
+            display: none;
+            min-width: 50px;
+            height: auto;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    
+    <!-- This is the chart container.  Add this to your html where you want the chart to appear.  The element '#chart-container' *must* have a specified width and height.  The chart's SVG element will size itself to take up the entire space of its container.  -->
+    <div id="chart-container">
+        <svg id="chart"></svg>
+    </div>
+
+
+
+    <!-- This is the script that creates and controls the chart.  Add it to the END of your html right before the closing body tag, or put it in an external .js file and add the link to that file to the end of your html right before the closing body tag. -->
+    <script>
+
+// The following object was created from the editor when the code was generated based on your selections.  Changing these values here will change the style or attribute of the chart.
+        var chartObj = {};
+
+        chartObj.margin = {top: %%top%%, right: %%right%%, bottom: %%bottom%%, left: %%left%%},
+        chartObj.bar_padding = %%barpadding%%;
+        chartObj.showtooltip = %%showtooltip%%;
+        chartObj.sig_digits = %%sig_digits%%;
+        chartObj.tick_format = %%tickformat%%
+        chartObj.xticknum = %%xticknum%%;
+        chartObj.yticknum = %%yticknum%%;
+        chartObj.xlabeltext = %%xlabeltext%%;
+        chartObj.ylabeltext = %%ylabeltext%%;
+        chartObj.xrotation = %%xrotation%%;
+        chartObj.dxaxis = %%dxaxis%%;
+        chartObj.yrotation = %%yrotation%%;
+        chartObj.dyaxis = %%dyaxis%%;
+
+
+
+        var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+    
+        var svg = d3.select("svg"),
+            container = svg.select(function() { return this.parentNode; });
+
+        var containerBBox = container.node().getBoundingClientRect();
+
+        var width = containerBBox.width - chartObj.margin.left - chartObj.margin.right,
+            height = containerBBox.height - chartObj.margin.top - chartObj.margin.bottom; 
+
+        svg.attr("width", containerBBox.width);
+        svg.attr("height", containerBBox.height);
+
+        var x = d3.scaleBand().rangeRound([0, width]).padding(chartObj.bar_padding),
+            y = d3.scaleLinear().rangeRound([height, 0]);
+
+        var g = svg.append("g").attr("transform", "translate(" + chartObj.margin.left + "," + chartObj.margin.top + ")");
+
+// TSV file chart initialization function. data.tsv is the file on your server that contains the data for the chart. 
+        d3.tsv("data.tsv", function(d) {
+            var columns = d3.keys(d[0]);
+            d[columns[1]] = +d[columns[1]];
+            return d;
+        }, function(error, data) {
+            if (error) throw error;
+
+            chartObj.drawChart(data);
+        });
+
+// CSV file chart initialization function.  Comment out the TSV function above and uncomment this block to use a CSV file of data.
+        // d3.csv("data.csv", function(d) {
+        //     var columns = d3.keys(d[0]);
+        //     d[columns[1]] = +d[columns[1]];
+        //     return d;
+        // }, function(error, data) {
+        //     if (error) throw error;
+
+        //     chartObj.drawChart(data);
+        // });
+
+// JSON file chart initialization function.  Comment out the TSV function above and uncomment this block to use a JSON file of data.
+        // d3.json("data.json", function(d) {
+        //     var columns = d3.keys(d[0]);
+        //     d[columns[1]] = +d[columns[1]];
+        //     return d;
+        // }, function(error, data) {
+        //     if (error) throw error;
+
+        //     chartObj.drawChart(data);
+        // });
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Instruction for how to use the chart with external JSON data are at the end of this file.//
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+//  This is the main fucntion to create the chart
+
+        chartObj.drawChart = function(data) {
+            var columns = d3.keys(data[0]);
+            
+            x.domain(data.map(function(d) { return d[columns[0]]; }));
+            y.domain([0, d3.max(data, function(d) { return d[columns[1]]; })]);
+
+// X Axis
+            g.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .transition()
+                .duration(300)
+                .call(d3.axisBottom(x).ticks(chartObj.xticknum))
+                .selectAll("text")  
+                    .style("text-anchor", chartObj.dxaxis[2])
+                    .attr("dx", chartObj.dxaxis[0])
+                    .attr("dy", chartObj.dxaxis[1])
+                    .attr("transform", "rotate(" + chartObj.xrotation + ")");
+
+// X Axis Label
+            svg.append("text") 
+                    .attr("transform", "translate(" + (width / 2 + chartObj.margin.left) + " ," + (+svg.attr("height")) + ")")
+                    .attr("class", "x-axis-label")
+                    .attr("dy", "-.25em")
+                    .style("text-anchor", "middle")
+                    .text(chartObj.xlabeltext); //xlabeltext
+
+// Y Axis
+            g.append("g")
+                .transition()
+                    .duration(300)
+                .call(d3.axisLeft(y).ticks(chartObj.yticknum, chartObj.tick_format))
+                .selectAll("text")  
+                    .style("text-anchor", chartObj.dyaxis[2])
+                    .attr("dx", chartObj.dyaxis[0])
+                    .attr("dy", chartObj.dyaxis[1])
+                    .attr("transform", "rotate(" + chartObj.yrotation + ")");
+
+// Y Axis Label
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("class", "y-axis-label")
+                .attr("x",0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text(chartObj.ylabeltext);
+
+// Bars
+            var bars = g.selectAll(".bar")
+                .data(data)
+                .enter().append("rect")
+                    .attr("class", "bar")
+                    .attr("x", function(d) { return x(d[columns[0]]); })
+                    .attr("y", function(d) { return y(d[columns[1]]); })
+                    .attr("width", x.bandwidth())
+                    .attr("height", function(d) { return height - y(d[columns[1]]); });
+                
+// Show a Tootip if desired
+            if (chartObj.showtooltip) {
+                bars.on("mousemove", function(d){
+                    tooltip
+                      .style("left", d3.event.pageX + 10 + "px")
+                      .style("top", d3.event.pageY - 40 + "px")
+                      .style("display", "inline-block")
+                      .html((d[columns[0]]) + ": " + d3.format((chartObj.sig_digits ? "." + chartObj.sig_digits : "") + chartObj.tick_format)(d[columns[1]]));
+                })
+                .on("mouseout", function(d) {
+                    tooltip.style("display", "none");
+                });              
+            } else {
+                bars.on("mousemove", function(d){
+                    tooltip.style("display", "none")
+                })
+                .on("mouseout", function(d) {
+                    tooltip.style("display", "none");
+                });                  
+            }
+        }
+
+        // var jdata = [
+        //     {
+        //         "Letter": "A",
+        //         "Freq": 20  
+        //     },
+        //     {
+        //         "Letter" : "B",
+        //         "Freq": 12
+        //     },
+        //     {
+        //         "Letter" : "C",
+        //         "Freq": 47
+        //     },
+        //     {
+        //         "Letter" : "D",
+        //         "Freq": 34
+        //     },
+        //     {
+        //         "Letter" : "E",
+        //         "Freq" : 54
+        //     },
+        //     {
+        //         "Letter" : "F",
+        //         "Freq" : 21
+        //     },
+        //     {
+        //         "Letter" : "G",
+        //         "Freq" : 57
+        //     },
+        //     {
+        //         "Letter" : "H",
+        //         "Freq" : 31
+        //     },
+        //     {
+        //         "Letter" : "I",
+        //         "Freq" : 17
+        //     },
+        //     {
+        //         "Letter" : "J",
+        //         "Freq" : 5
+        //     },
+        //     {
+        //         "Letter" : "K",
+        //         "Freq" : 23
+        //     },
+        //     {
+        //         "Letter" : "L",
+        //         "Freq" : 39
+        //     },
+        //     {
+        //         "Letter" : "M",
+        //         "Freq" : 29
+        //     },
+        //     {
+        //         "Letter" : "N",
+        //         "Freq" : 33
+        //     },
+        //     {
+        //         "Letter" : "O",
+        //         "Freq" : 18
+        //     },
+        //     {
+        //         "Letter" : "P",
+        //         "Freq" : 35
+        //     },
+        //     {
+        //         "Letter" : "Q",
+        //         "Freq" : 11
+        //     },
+        //     {
+        //         "Letter" : "R",
+        //         "Freq" : 45
+        //     },
+        //     {
+        //         "Letter" : "S",
+        //         "Freq" : 43
+        //     },
+        //     {
+        //         "Letter" : "T",
+        //         "Freq" : 28
+        //     },
+        //     {
+        //         "Letter" : "U",
+        //         "Freq" : 26
+        //     },
+        //     {
+        //         "Letter" : "V",
+        //         "Freq" : 30
+        //     },
+        //     {
+        //         "Letter" : "X",
+        //         "Freq" : 5
+        //     },
+        //     {
+        //         "Letter" : "Y",
+        //         "Freq" : 4
+        //     },
+        //     {
+        //         "Letter" : "Z",
+        //         "Freq" : 2
+        //     }
+        // ]
+
+        // chartObj.drawChart(jdata);
+    </script>
+</body>

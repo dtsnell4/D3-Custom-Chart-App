@@ -1,0 +1,216 @@
+body,
+html {
+  margin: 0;
+  font-family: 'Amiko', sans-serif;
+}
+header {
+  background-color: #2c3e50;
+  font-size: 20px;
+  color: #FFF;
+  height: 50px;
+  padding: 11px 25px;
+}
+header .brand {
+  font-weight: bold;
+}
+nav {
+  float: right;
+  margin-right: 0px;
+  font-size: 12px;
+}
+nav .divider {
+  background-color: #fff;
+  width: 1px;
+  height: 30px;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 15px;
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+}
+nav a:hover,
+nav a:visited,
+nav a:active,
+nav a:focus {
+  color: #67c8ff;
+  text-decoration: none;
+  cursor: pointer;
+}
+.axis {
+  font: 10px sans-serif;
+}
+.x-axis-label,
+.y-axis-label {
+  font-weight: bold;
+}
+.toolTip {
+  position: absolute;
+  display: none;
+  min-width: 50px;
+  height: auto;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 5px;
+  text-align: center;
+}
+#chart {
+  overflow: visible;
+}
+#chart-container {
+  width: 100%;
+  /*height: 500px;*/
+  border: 1px solid #ccc;
+  position: relative;
+}
+#chart-container:before {
+  content: "";
+  display: block;
+  padding-top: 75%;
+  /* initial ratio of 1:1*/
+}
+#chart-container #inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.container-fluid {
+  position: static;
+}
+#panel,
+#panel2 {
+  position: static;
+  display: inline-block;
+}
+#panel .control-label {
+  text-align: right;
+  padding-top: 5px;
+}
+#panel hr {
+  margin: 40px 20px;
+}
+#panel h4:not(:first-child) {
+  margin-top: 30px;
+}
+#panel2 {
+  display: none;
+}
+#panel2 h4 {
+  margin-top: 50px;
+}
+#panel2 #p {
+  margin: 0 40px;
+}
+.panel {
+  width: 100%;
+}
+.panel.main {
+  padding: 20px;
+  margin-bottom: 0;
+  vertical-align: top;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  position: relative;
+}
+.panel.panel-default {
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+}
+#update {
+  display: block;
+  margin: 15px auto 0;
+}
+#update .glyphicon {
+  font-size: 30px;
+}
+.uptext {
+  vertical-align: text-bottom;
+  font-size: 25px;
+}
+#getcode .glyphicon {
+  font-size: 20px;
+}
+.glyphicon-question-sign {
+  color: #ff3a3a;
+  font-size: 17px;
+  vertical-align: super;
+}
+.glyphicon-question-sign.howto {
+  font-size: 12px;
+  vertical-align: text-top;
+}
+#tsvdata,
+#thecode {
+  height: 400px;
+}
+.form-horizontal .form-group {
+  margin-right: 15px;
+  margin-left: 15px;
+}
+.formatlist {
+  list-style: none;
+  padding: 0px;
+}
+.formatlist li {
+  text-indent: -18px;
+  margin-left: 18px;
+}
+.control-top-pad .control-div {
+  padding-top: 7px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0;
+  /* <-- Apparently some margin are still there even though it's hidden */
+}
+blockquote {
+  font-size: 12px;
+}
+@media screen and (min-width: 1024px) {
+  .container-fluid {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  #panel,
+  #panel2 {
+    top: 51px;
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    overflow: auto;
+    display: inline-block;
+  }
+  .panel.main {
+    width: 49%;
+    display: block;
+  }
+  #update {
+    margin: 50px auto;
+  }
+  nav {
+    margin-right: 70px;
+  }
+}
+@media screen and (min-width: 768px) {
+  nav {
+    margin-right: 50px;
+    font-size: 15px;
+  }
+  #update {
+    margin: 20px auto 0;
+  }
+  #update .glyphicon {
+    font-size: 40px;
+  }
+  .uptext {
+    font-size: 35px;
+  }
+}
